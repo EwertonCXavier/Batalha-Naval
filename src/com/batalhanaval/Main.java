@@ -140,21 +140,18 @@ public class Main {
     while(isPlaying) {
 //  Verifica se a diferença de jogadas entre o jogador e a CPU é 1
 
-//      if((contJogador - contCPU) == 1) {
-//
-//        contCPU++;
-//      } else {
+      if((contJogador - contCPU) == 1) {
+        tabuleiroJogador = vezCPU(contCPU, acertosCPU, tabuleiroJogador);
+        contCPU++;
+        isPlaying = false;
+      } else {
         tabuleiroCPU = vezJogador(contJogador, acertosJogador, tabuleiroCPU);
         contJogador++;
-//      }
-      isPlaying = false;
+      }
+
     }
   }
 
-
-  public static String[][] atualizaTabuleiro(String[][] board) {
-    return board;
-  }
 
   public static String[][] vezJogador(int qtdJogadas, int numAcertos, String[][] board) {
 //    . Navio posicionado N (ene maiúsculo)
@@ -180,11 +177,35 @@ public class Main {
       board[index][coluna] = "-";
     } else {
       // Repetir a jogada;
+      vezJogador(qtdJogadas, numAcertos, board); // Recursão
       System.out.println("Repetir a jogada!");
     }
 
     imprimeTabuleiro(tabuleiro);
 
     return tabuleiro;
+  }
+
+
+  public static String[][] vezCPU(int qtdJogadas, int numAcertos, String[][] board) {
+    Random rand = new Random();
+    int positionX;
+    int positionY;
+    positionX = rand.nextInt(board.length);
+    positionY = rand.nextInt(board.length);
+    if (board[positionX][positionY].equals("N")) {
+      board[positionX][positionY] = "*";
+    } else if (board[positionX][positionY].equals("_")) {
+      board[positionX][positionY] = "-";
+    } else {
+      // Repetir a jogada;
+      vezCPU(qtdJogadas, numAcertos, board);
+      System.out.println("Repetir a jogada!");
+    }
+    System.out.println("\n\nAqui vai o tabuleiro: \n\n");
+    imprimeTabuleiro(board);
+
+
+    return board;
   }
 }
