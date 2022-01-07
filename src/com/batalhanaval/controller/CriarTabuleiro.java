@@ -12,6 +12,7 @@ public class CriarTabuleiro {
   private String[][] tabuleiroCPU;
   private Tabuleiro jogador;
   private Tabuleiro cpu;
+  private String NUMEROS = "0123";
 
   public CriarTabuleiro() {
     this.jogador = new Tabuleiro(0, 0, tabuleiroJogador);
@@ -29,28 +30,27 @@ public class CriarTabuleiro {
     this.tabuleiroCPU = criarTabuleiro();
     cpu.setTabuleiro(this.tabuleiroCPU);
 //    Posicionamento dos navios no tabuleiro da CPU
-    while(cont < cpu.getTabuleiro().length) {
+    while (cont < cpu.getTabuleiro().length) {
       positionX = rand.nextInt(cpu.getTabuleiro().length);
       positionY = rand.nextInt(cpu.getTabuleiro().length);
       System.out.printf("O navio ficará posicionado em: %d %d%n", positionX, positionY);
 
-      while(!cpu.getTabuleiro()[positionX][positionY].equals("_")) {
+      while (!cpu.getTabuleiro()[positionX][positionY].equals("_")) {
         positionX = rand.nextInt(cpu.getTabuleiro().length);
         positionY = rand.nextInt(cpu.getTabuleiro().length);
         System.out.printf("O navio ficará posicionado, após revisão, em: %d %d%n", positionX, positionY);
       }
       cpu.setValueAtIndex(positionX, positionY, "C");
-      cont ++;
+      cont++;
 
     }
     //    Imprime o tabuleiro na tela
     imprimeTabuleiro(cpu.getTabuleiro());
   }
 
-
   public void posicionarNaviosJogador() {
     Scanner input = new Scanner(System.in);
-    String linha, aux;
+    String linha;
     int coluna;
     String alphabet = "ABCD";
     this.tabuleiroJogador = criarTabuleiro();
@@ -60,12 +60,12 @@ public class CriarTabuleiro {
     for (int i = 0; i < jogador.getTabuleiro().length; i++) {
       linha = linhaTabuleiro(input, alphabet);
       int index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
-      coluna = colunaTabuleiro(input, alphabet, this.tabuleiroJogador);
+      coluna = colunaTabuleiro(input);
 
       while (jogador.getTabuleiro()[index][coluna].equals("N")) {
         linha = linhaTabuleiro(input, alphabet);
         index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
-        coluna = colunaTabuleiro(input, alphabet, this.tabuleiroJogador);
+        coluna = colunaTabuleiro(input);
       }
       if (coluna < jogador.getTabuleiro().length) {
         if (jogador.getTabuleiro()[index][coluna].equals("_")) {
@@ -101,28 +101,29 @@ public class CriarTabuleiro {
     return linha;
   }
 
-  public int colunaTabuleiro(@NotNull Scanner input, String alphabet, String[][] board) {
-    String aux;
-    int coluna;
-    System.out.print("Digite o valor da coluna: ");
-    aux = input.nextLine();
-    coluna = Integer.parseInt(aux);
+  public int colunaTabuleiro(@NotNull Scanner input) {
+    String coluna;
+    int index;
 
-    while (coluna < 0 || coluna >= board.length) {
+    System.out.print("Digite o valor da coluna: ");
+    coluna = input.nextLine();
+    index = NUMEROS.indexOf(coluna);
+
+    while (index == -1) {
       System.out.print("Repita a coluna: ");
-      aux = input.nextLine();
-      coluna = Integer.parseInt(aux);
+      coluna = input.nextLine();
+      index = NUMEROS.indexOf(coluna);
     }
 
-    return coluna;
+    return index;
   }
 
 
   public void isPlayingClass() {
-    boolean isPlaying  = true;
-    while(isPlaying) {
+    boolean isPlaying = true;
+    while (isPlaying) {
 //  Verifica se a diferença de jogadas entre o jogador e a CPU é 1
-      if((jogador.getContadorJogadas() - cpu.getContadorJogadas()) == 1) {
+      if ((jogador.getContadorJogadas() - cpu.getContadorJogadas()) == 1) {
         vezCPU();
         cpu.setContadorJogadas(cpu.getContadorJogadas() + 1);
         System.out.printf("Acertos - CPU: %d%n", cpu.getAcertos());
@@ -132,7 +133,7 @@ public class CriarTabuleiro {
         jogador.setContadorJogadas(jogador.getContadorJogadas() + 1);
 
       }
-      if(jogador.getAcertos() == jogador.getTabuleiro().length) {
+      if (jogador.getAcertos() == jogador.getTabuleiro().length) {
         System.out.println("Parabéns,você ganhou!!!!!");
         isPlaying = false;
       } else if (cpu.getAcertos() == cpu.getTabuleiro().length) {
@@ -157,9 +158,9 @@ public class CriarTabuleiro {
 
     linha = linhaTabuleiro(input, alphabet);
     int index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
-    coluna = colunaTabuleiro(input, alphabet, cpu.getTabuleiro());
+    coluna = colunaTabuleiro(input);
 
-    if ((cpu.getTabuleiro()[index][coluna].equals("C") ||  cpu.getTabuleiro()[index][coluna].equals("c") || cpu.getTabuleiro()[index][coluna].equals("X")) && !(jogador.getTabuleiro()[index][coluna].equals("N") || jogador.getTabuleiro()[index][coluna].equals("n"))) {
+    if ((cpu.getTabuleiro()[index][coluna].equals("C") || cpu.getTabuleiro()[index][coluna].equals("c") || cpu.getTabuleiro()[index][coluna].equals("X")) && !(jogador.getTabuleiro()[index][coluna].equals("N") || jogador.getTabuleiro()[index][coluna].equals("n"))) {
       jogador.setValueAtIndex(index, coluna, "*");
       jogador.setAcertos(jogador.getAcertos() + 1);
       cpu.setValueAtIndex(index, coluna, "O");
@@ -186,11 +187,20 @@ public class CriarTabuleiro {
     int positionY;
     positionX = rand.nextInt(jogador.getTabuleiro().length);
     positionY = rand.nextInt(jogador.getTabuleiro().length);
-    if ((jogador.getTabuleiro()[positionX][positionY].equals("N") ||  jogador.getTabuleiro()[positionX][positionY].equals("n") || jogador.getTabuleiro()[positionX][positionY].equals("X")) && !cpu.getTabuleiro()[positionX][positionY].equals("C")) {
+
+
+    // Verifica se já existe alguma tentativa na posiao
+    while (cpu.getTabuleiro()[positionX][positionY].equals("-")) {
+      positionX = rand.nextInt(jogador.getTabuleiro().length);
+      positionY = rand.nextInt(jogador.getTabuleiro().length);
+    }
+    System.out.printf("CPU coordinates: [%d][%d]%n", positionX, positionY);
+
+    if ((jogador.getTabuleiro()[positionX][positionY].equals("N") || jogador.getTabuleiro()[positionX][positionY].equals("n") || jogador.getTabuleiro()[positionX][positionY].equals("X")) && !cpu.getTabuleiro()[positionX][positionY].equals("C")) {
       cpu.setValueAtIndex(positionX, positionY, "*");
       cpu.setAcertos(cpu.getAcertos() + 1);
       jogador.setValueAtIndex(positionX, positionY, "O");
-    } else if((jogador.getTabuleiro()[positionX][positionY].equals("N") || jogador.getTabuleiro()[positionX][positionY].equals("n")) && (cpu.getTabuleiro()[positionX][positionY].equals("C") || cpu.getTabuleiro()[positionX][positionY].equals("c"))) {
+    } else if ((jogador.getTabuleiro()[positionX][positionY].equals("N") || jogador.getTabuleiro()[positionX][positionY].equals("n")) && (cpu.getTabuleiro()[positionX][positionY].equals("C") || cpu.getTabuleiro()[positionX][positionY].equals("c"))) {
       cpu.setValueAtIndex(positionX, positionY, "X");
       cpu.setAcertos(cpu.getAcertos() + 1);
       jogador.setValueAtIndex(positionX, positionY, "O");
@@ -203,7 +213,7 @@ public class CriarTabuleiro {
       vezCPU();
       System.out.println("Repetir a jogada!");
     }
-    System.out.println("\n\nAqui vai o tabuleiro: \n\n");
+    System.out.println("\nAqui vai o tabuleiro: \n");
     imprimeTabuleiro(cpu.getTabuleiro());
   }
 
@@ -219,22 +229,6 @@ public class CriarTabuleiro {
       }
     }
   }
-
-
-//  public int atualizaContagem(String[] @NotNull [] board) {
-//    int contagem = 0;
-//    // É necessário passar a quantidade de acertos atual do jogador/CPU e o tabuleiro do adversário para fazer a contagem
-//    for(int linha = 0; linha < board[0].length; linha++) {
-//      for(int coluna = 0; coluna < board.length; coluna++) {
-//        if(board[linha][coluna].equals("0")) {
-//          contagem++;
-//        }
-//      }
-//    }
-//
-//    System.out.printf("A quantidade de acertos do jogador atual eh %d%n", contagem);
-//    return contagem;
-//  }
 
 
 }
