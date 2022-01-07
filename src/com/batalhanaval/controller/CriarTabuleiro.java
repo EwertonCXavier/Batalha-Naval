@@ -135,9 +135,17 @@ public class CriarTabuleiro {
       }
       if (jogador.getAcertos() == jogador.getTabuleiro().length) {
         System.out.println("Parabéns,você ganhou!!!!!");
+        System.out.println("JOGADOR:");
+        imprimeTabuleiro(jogador.getTabuleiro());
+        System.out.println("CPU:");
+        imprimeTabuleiro(cpu.getTabuleiro());
         isPlaying = false;
       } else if (cpu.getAcertos() == cpu.getTabuleiro().length) {
-        System.out.println("Infelizmente você perdeu! Tente novamente!");
+        System.out.println("A CPU venceu o jogo!");
+        System.out.println("CPU:");
+        imprimeTabuleiro(cpu.getTabuleiro());
+        System.out.println("JOGADOR:");
+        imprimeTabuleiro(jogador.getTabuleiro());
         isPlaying = false;
       }
     }
@@ -159,6 +167,12 @@ public class CriarTabuleiro {
     linha = linhaTabuleiro(input, alphabet);
     int index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
     coluna = colunaTabuleiro(input);
+
+    while (!jogador.getTabuleiro()[index][coluna].equals("_") && !jogador.getTabuleiro()[index][coluna].equals("N")) {
+      linha = linhaTabuleiro(input, alphabet);
+      index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
+      coluna = colunaTabuleiro(input);
+    }
 
     if ((cpu.getTabuleiro()[index][coluna].equals("C") || cpu.getTabuleiro()[index][coluna].equals("c") || cpu.getTabuleiro()[index][coluna].equals("X")) && !(jogador.getTabuleiro()[index][coluna].equals("N") || jogador.getTabuleiro()[index][coluna].equals("n"))) {
       jogador.setValueAtIndex(index, coluna, "*");
@@ -189,11 +203,12 @@ public class CriarTabuleiro {
     positionY = rand.nextInt(jogador.getTabuleiro().length);
 
 
-    // Verifica se já existe alguma tentativa na posiao
-    while (cpu.getTabuleiro()[positionX][positionY].equals("-")) {
+    // Verifica se já existe alguma tentativa na posicao
+    while (!cpu.getTabuleiro()[positionX][positionY].equals("_") && !cpu.getTabuleiro()[positionX][positionY].equals("C")) {
       positionX = rand.nextInt(jogador.getTabuleiro().length);
       positionY = rand.nextInt(jogador.getTabuleiro().length);
     }
+
     System.out.printf("CPU coordinates: [%d][%d]%n", positionX, positionY);
 
     if ((jogador.getTabuleiro()[positionX][positionY].equals("N") || jogador.getTabuleiro()[positionX][positionY].equals("n") || jogador.getTabuleiro()[positionX][positionY].equals("X")) && !cpu.getTabuleiro()[positionX][positionY].equals("C")) {

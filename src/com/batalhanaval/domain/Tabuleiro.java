@@ -35,11 +35,6 @@ public class Tabuleiro {
 
   public void setTabuleiro(String[] @NotNull [] tabuleiro) {
     this.tabuleiro = tabuleiro;
-    //    for(int i = 0; i < tabuleiro[0].length; i++) {
-//      for(int j = 0; j < tabuleiro.length; j++) {
-//        this.tabuleiro[i][j] = tabuleiro[i][j];
-//      }
-//    }
   }
 
   public void setValueAtIndex(int linha, int coluna, String value) {
