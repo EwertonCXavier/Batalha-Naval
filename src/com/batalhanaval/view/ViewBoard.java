@@ -1,6 +1,12 @@
 package com.batalhanaval.view;
 
+import com.batalhanaval.controller.CriarTabuleiro;
+import jdk.swing.interop.SwingInterOpUtils;
+
+import java.util.Scanner;
+
 public class ViewBoard {
+
   public ViewBoard() {
 
   }
@@ -21,5 +27,14 @@ public class ViewBoard {
     System.out.println("---------------------------------------------");
   }
 
+  public void entrada() {
+    System.out.println("_____________________________________________");
+    System.out.println("|                                           |");
+    System.out.println("|               BATALHA NAVAL               |");
+    System.out.println("|                                           |");
+    System.out.println("|    Por: Ewerton Xavier e Julia Miranda    |");
+    System.out.println("|                                           |");
+    System.out.println("|___________________________________________|\n");
+  }
 
 }
