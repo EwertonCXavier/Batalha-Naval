@@ -1,7 +1,9 @@
 package com.batalhanaval.controller;
 
 import com.batalhanaval.domain.Tabuleiro;
+import com.batalhanaval.view.ViewBoard;
 import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Arrays;
 import java.util.Random;
@@ -12,7 +14,9 @@ public class CriarTabuleiro {
   private String[][] tabuleiroCPU;
   private Tabuleiro jogador;
   private Tabuleiro cpu;
-  private String NUMEROS = "0123";
+  private String NUMEROS = "0123456789";
+  String alphabet = "ABCDEFGHIJ";
+  ViewBoard textosDaView = new ViewBoard();
 
   public CriarTabuleiro() {
     this.jogador = new Tabuleiro(0, 0, tabuleiroJogador);
@@ -45,6 +49,7 @@ public class CriarTabuleiro {
 
     }
     //    Imprime o tabuleiro na tela
+    textosDaView.imprimirCPU();
     imprimeTabuleiro(cpu.getTabuleiro());
   }
 
@@ -52,7 +57,6 @@ public class CriarTabuleiro {
     Scanner input = new Scanner(System.in);
     String linha;
     int coluna;
-    String alphabet = "ABCD";
     this.tabuleiroJogador = criarTabuleiro();
     jogador.setTabuleiro(this.tabuleiroJogador);
 
@@ -70,6 +74,7 @@ public class CriarTabuleiro {
       if (coluna < jogador.getTabuleiro().length) {
         if (jogador.getTabuleiro()[index][coluna].equals("_")) {
           jogador.setValueAtIndex(index, coluna, "N");
+          textosDaView.imprimirJogador();
           imprimeTabuleiro(jogador.getTabuleiro());
         }
       }
@@ -77,10 +82,11 @@ public class CriarTabuleiro {
   }
 
   public String[] @NotNull [] criarTabuleiro() {
-    String[][] tabuleiro = new String[4][4];
+    String[][] tabuleiro = new String[10][10];
     for (String[] strings : tabuleiro) {
       Arrays.fill(strings, "_");
     }
+    textosDaView.imprimirJogador();
     imprimeTabuleiro(tabuleiro);
     return tabuleiro;
   }
@@ -135,16 +141,16 @@ public class CriarTabuleiro {
       }
       if (jogador.getAcertos() == jogador.getTabuleiro().length) {
         System.out.println("Parabéns,você ganhou!!!!!");
-        System.out.println("JOGADOR:");
+        textosDaView.imprimirJogador();
         imprimeTabuleiro(jogador.getTabuleiro());
-        System.out.println("CPU:");
+        textosDaView.imprimirCPU();
         imprimeTabuleiro(cpu.getTabuleiro());
         isPlaying = false;
       } else if (cpu.getAcertos() == cpu.getTabuleiro().length) {
         System.out.println("A CPU venceu o jogo!");
-        System.out.println("CPU:");
+        textosDaView.imprimirCPU();
         imprimeTabuleiro(cpu.getTabuleiro());
-        System.out.println("JOGADOR:");
+        textosDaView.imprimirJogador();
         imprimeTabuleiro(jogador.getTabuleiro());
         isPlaying = false;
       }
@@ -159,7 +165,6 @@ public class CriarTabuleiro {
 //    . Tiro certeiro com navio posicionado X (xis maiúsculo)
 //    . Tiro na água com navio posicionado n (ene minúsculo)
 
-    String alphabet = "ABCD";
     Scanner input = new Scanner(System.in);
     String linha;
     int coluna;
@@ -190,7 +195,7 @@ public class CriarTabuleiro {
       vezJogador(); // Recursão
       System.out.println("Repetir a jogada!");
     }
-
+    textosDaView.imprimirJogador();
     imprimeTabuleiro(jogador.getTabuleiro());
 
   }
@@ -229,17 +234,25 @@ public class CriarTabuleiro {
       System.out.println("Repetir a jogada!");
     }
     System.out.println("\nAqui vai o tabuleiro: \n");
+
+    textosDaView.imprimirCPU();
     imprimeTabuleiro(cpu.getTabuleiro());
   }
 
   public void imprimeTabuleiro(String[] @NotNull [] board) {
     //    Impressão do tabuleiro formatado
+    int indiceLetras = 0;
     for (int i = 0; i < board[0].length; i++) {
       for (int j = 0; j < board.length; j++) {
+        if (j == 0) {
+          System.out.printf("| %s |", alphabet.charAt(indiceLetras));
+          indiceLetras++;
+        }
         if (j == (board.length - 1)) {
-          System.out.printf("%s%n", board[i][j]);
+          System.out.printf(" %s |%n", board[i][j]);
+          System.out.println("---------------------------------------------");
         } else {
-          System.out.printf("%s ", board[i][j]);
+          System.out.printf(" %s |", board[i][j]);
         }
       }
     }
