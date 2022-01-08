@@ -233,10 +233,10 @@ public class CriarTabuleiro {
       vezCPU();
       System.out.println("Repetir a jogada!");
     }
-    System.out.println("\nAqui vai o tabuleiro: \n");
+//    System.out.println("\nAqui vai o tabuleiro: \n");
 
-    textosDaView.imprimirCPU();
-    imprimeTabuleiro(cpu.getTabuleiro());
+//    textosDaView.imprimirCPU();
+//    imprimeTabuleiro(cpu.getTabuleiro());
   }
 
   public void imprimeTabuleiro(String[] @NotNull [] board) {
