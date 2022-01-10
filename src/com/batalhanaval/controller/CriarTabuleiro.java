@@ -95,11 +95,16 @@ public class CriarTabuleiro {
   public String linhaTabuleiro(@NotNull Scanner input, String alphabet) {
     //  Linha
     String linha;
-    System.out.print("Digite o valor da linha: ");
+    System.out.print("Digite o valor da linha [a-j] ou [A-J]: ");
     linha = input.nextLine();
+    // Validação da linha
+    while (linha.length() != 1) {
+      System.out.print("Digite uma linha válida [a-j] ou [A-J]: ");
+      linha = input.nextLine();
+    }
     int index = alphabet.indexOf(linha.toUpperCase());
     while (index == -1) {
-      System.out.print("Repita a linha: ");
+      System.out.print("Repita a linha [a-j] ou [A-J]: ");
       linha = input.nextLine();
       index = alphabet.toLowerCase().indexOf(linha.toLowerCase());
     }
@@ -111,12 +116,18 @@ public class CriarTabuleiro {
     String coluna;
     int index;
 
-    System.out.print("Digite o valor da coluna: ");
+    System.out.print("Digite o valor da coluna [0-9]: ");
     coluna = input.nextLine();
+
+    // Confirma que o tamanho da 'String' é 1
+    while (coluna.length() != 1) {
+      System.out.print("Digite uma coluna válida [0-9]: ");
+      coluna = input.nextLine();
+    }
     index = NUMEROS.indexOf(coluna);
 
     while (index == -1) {
-      System.out.print("Repita a coluna: ");
+      System.out.print("Repita a coluna [0-9]: ");
       coluna = input.nextLine();
       index = NUMEROS.indexOf(coluna);
     }
